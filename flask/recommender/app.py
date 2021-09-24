@@ -21,10 +21,11 @@ def seeAllPosts():
             }
             }
         ]))
-        # for item in interactions:
-        #     tags = type(db.db.posts.find_one({"post_id":item['_id']}))
-        #     item['tags'] = tags
-        #     print(tags)
+        for item in interactions:
+            item['user_id'] = user_id
+            # tags = type(db.db.posts.find_one({"post_id":item['_id']}))
+            # item['tags'] = tags
+            # print(tags)
         # print(interactions)
         # posts = list(db.db.posts.find())
         # for user in interactions:
