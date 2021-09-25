@@ -1,10 +1,12 @@
 from array import array
 from re import match
-from flask import Flask, request
+from flask import Flask, request, jsonify
+import flask
 from flask.wrappers import Response
 import json
 from bson.objectid import ObjectId
 from bson.json_util import dumps
+from werkzeug.wrappers import response
 app = Flask(__name__)
 import db
 
@@ -43,11 +45,13 @@ def recommendedPosts():
     #         response=json.dumps({"errors":"cannot get any interaction"}),
     #         status=500,
     #         mimetype="application/json")
-        return Response(
-        response=json.dumps(interactions),
-        # response=json.dumps({"test":"test"}),
-        status=200,
-        mimetype="application/json")
+        response = jsonify(interactions)
+        response.headers.add("Access-Control-Allow-Origin", "*")
+        return response
+        # return Response(
+        # response=json.dumps(interactions),
+        # status=200,
+        # mimetype="application/json")
 
 @app.route('/posts', methods=["GET"])
 def seeAllPosts():
