@@ -27,20 +27,27 @@ def lightfmReccomend(interact,postdetail):
             # print(post)
             ppid.append(post['_id'])
             ptags = [] # all tags in this post
+            # print(ptags)
             for tag in post['tags']:
+                a = 0
                 if tag == "Dogs":
-                    a = 0
-                elif tag == "Cats":
                     a = 1
-                elif tag == "Insects":
+                elif tag == "Cats":
                     a = 2
-                elif tag == "Adoption":
+                elif tag == "Fishes":
                     a = 3
-                elif tag == "Heath":
+                elif tag == "Mammals":
                     a = 4
-                elif tag == "Lovely":
+                elif tag == "Insects":
                     a = 5
-                ptags.append(a)
+                elif tag == "Reptiles":
+                    a = 6
+                elif tag == "Birds":
+                    a = 7
+                elif tag == "Amphibians":
+                    a = 8
+                ptags.append(tag)
+                # print(ptags)
             # print(list(ptags))
             tags.append(tuple(ptags))
 
@@ -48,15 +55,16 @@ def lightfmReccomend(interact,postdetail):
                 # print("x")
                 count = count+1 
                 if post['_id'] == inter['_id']:
-                    inter_f = {"_id": inter['_id'],"interactions" : inter['interactions'],"user_id": 1,"inumber":count}
-                    # print(inter_f)
+                    inter_f = {"_id": inter['_id'],"interactions" : inter['interactions'],"user_id": 1,"inumber":count,"tags":tuple(ptags)}
+                    # print(inter_f['tags'])
+                    # print("x")
                     inumber.append(count)
                     iuid.append(1)
                     allinteractions.append(inter_f)
                     # allinteractions.append(inter)
                 else:
                     # blank = {"_id": post['_id'],"interactions" : 0,"user_id": userid}
-                    blank = {"_id": post['_id'],"interactions" : 0,"user_id": 1,"inumber":count}
+                    blank = {"_id": post['_id'],"interactions" : 0,"user_id": 1,"inumber":count,"tags":tuple(ptags)}
                     # print(blank)
                     inumber.append(count)
                     iuid.append(1)
@@ -77,7 +85,7 @@ def lightfmReccomend(interact,postdetail):
     # num_users, num_items = dataset.interactions_shape()
     # print(num_users)
     # print(num_items)
-
+    print(tags)
     dataset.fit_partial(items=tuple(inumber),item_features=tuple(tags))
 
     # matrix
@@ -109,7 +117,7 @@ def lightfmReccomend(interact,postdetail):
         mat = sp.lil_matrix((rows, cols), dtype=np.int32)
         for inter in data:
             if inter['interactions'] >= min_rating:
-                print("x")
+                # print("x")
                 # print(user,interidf)
                 # print(inter['interactions'])
                 # print([inter['user_id'],inter['_id']])
@@ -123,19 +131,20 @@ def lightfmReccomend(interact,postdetail):
     # print(num_users)
     # print(num_items)
 
-    interact_matrix = _build_interaction_matrix(num_users, num_items, allinteractions,useridi, min_rating=0)
+    interact_matrix = _build_interaction_matrix(num_users, num_items, allinteractions,useridi, min_rating=1)
 
-    # print(inumber, tuple(tags))
+    print(interact_matrix)
     # item_features = dataset.build_item_features(tuple((inumber), [tags]))
     # print(tuple(tags))
-    item_features = dataset.build_item_features(((x['inumber'], tuple(tags))
+    item_features = dataset.build_item_features(((x['inumber'], [x['tags']])
                                               for x in allinteractions))
+    
     # print(interact_matrix)
     # print("x")
-    # print(item_features)
+    print(item_features)
 
     # model
-    model = LightFM(loss='warp')
+    model = LightFM(loss='bpr')
     model.fit(interact_matrix, item_features=item_features)
 
     def sample_recommendation(num_users, num_items,data, model, user_id, postdetail):
@@ -152,9 +161,9 @@ def lightfmReccomend(interact,postdetail):
             print(x['_id'])
             # print("        %s" % x)
             for post in postdetail:
-                print(post)
+                # print(post)
                 if x['_id']== post['_id']:
-                    result.append(post)
+                    result.append(post['tags'])
             # result.append(x)
         return result
 
