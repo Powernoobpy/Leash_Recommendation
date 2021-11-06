@@ -99,7 +99,7 @@ def lightfmReccomend(interact,postdetail):
         for post in postdetail:
 
             if x['_id']== post['_id']:
-                recommend.append(post['tags'])
+                recommend.append(post)
 
     return recommend
     
