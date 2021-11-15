@@ -43,7 +43,10 @@ def seeAllPosts():
         for post in data:
             post["_id"] = str(post["_id"])
             post["tags"] = list(post["tags"])
-            post['owner']['user_id'] = str(post['owner']['user_id'])
+            if("_id" in post["owner"]):
+                post["owner"]["_id"] = str(post["owner"]["_id"])
+            if("user_id" in post["owner"]):
+                post["owner"]["user_id"] = str(post["owner"]["user_id"])
         return data
 
     except Exception as ex:
@@ -56,6 +59,7 @@ def recommendation():
     try:
         user_id = request.args.get('user_id')
         recommend = lightfmReccomend(recommendedPosts(user_id),seeAllPosts())
+        # print(recommend)
         return Response(
             response=json.dumps(recommend),
             status=200,
