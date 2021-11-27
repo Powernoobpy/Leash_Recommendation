@@ -1,18 +1,17 @@
-from array import array
-from re import match
-from flask import Flask, request, jsonify
-import flask
+from flask import Flask, request, jsonify, Response
+from flask_cors import CORS
 from flask.wrappers import Response
 import json
-from bson.objectid import ObjectId
 from bson.json_util import dumps
 from werkzeug.wrappers import response
-app = Flask(__name__)
 import db
 from recommendation import lightfmReccomend
 
+app = Flask(__name__)
+# cors = CORS(app, resources={r"/api/*": {"origins": "localhost:3000/*"}})
+cors = CORS(app)
 def recommendedPosts(user_id):
-    print(user_id)
+    # print(user_id)
     try:
         interactions = tuple(db.db.interactions.aggregate([
             {"$match":{"user_id":user_id}},
@@ -26,7 +25,7 @@ def recommendedPosts(user_id):
         for item in interactions:
             item['user_id'] = user_id
   
-        print(interactions)
+        # print(interactions)
         return interactions 
 
     except Exception as ex:
@@ -60,16 +59,18 @@ def recommendation():
         user_id = request.args.get('user_id')
         recommend = lightfmReccomend(recommendedPosts(user_id),seeAllPosts())
         # print(recommend)
-        return Response(
-            response=json.dumps(recommend),
-            status=200,
-            mimetype="application/json")
+        return jsonify(recommend)
+        # return Response(
+        #     response=json.dumps(recommend),
+        #     status=200,
+        #     mimetype="application/json")
     except Exception as ex:
         print(ex)
-        return Response(
-            response=json.dumps({"errors":"cannot get recommend posts"}),
-            status=500,
-            mimetype="application/json")
+        return jsonify({"errors":"cannot get recommend posts"})
+        # return Response(
+        #     response=json.dumps({"errors":"cannot get recommend posts"}),
+        #     status=500,
+        #     mimetype="application/json")
 
 if __name__ == '__main__':
     app.run(port=5000, debug=True)

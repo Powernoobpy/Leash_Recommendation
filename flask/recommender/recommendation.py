@@ -31,7 +31,7 @@ def lightfmReccomend(interact,postdetail):
 
                     if post['_id'] == inter['_id']:
                         inter_f = {"_id": inter['_id'],"interactions" : inter['interactions'],"user_id": 1,"inumber":count,"tags":tag}
-                        print(inter_f)
+                        # print(inter_f)
                         inumber.append(count)
                         iuid.append(1)
                         allinteractions.append(inter_f)
@@ -40,7 +40,7 @@ def lightfmReccomend(interact,postdetail):
                         break
                 if post['_id'] != inter_f['_id']:
                         blank = {"_id": post['_id'],"interactions" : 0,"user_id": 1,"inumber":count,"tags":tag}
-                        print(blank)
+                        # print(blank)
                         inumber.append(count)
                         iuid.append(1)
                         allinteractions.append(blank)
@@ -72,17 +72,17 @@ def lightfmReccomend(interact,postdetail):
         return mat.tocoo()
 
     num_users, num_items = _get_dimensions(inumber, useridi)
-    print(num_users)
-    print(num_items)
+    # print(num_users)
+    # print(num_items)
 
     interact_matrix = _build_interaction_matrix(num_users, num_items, allinteractions,useridi, min_rating=1)
 
-    print(interact_matrix)
+    # print(interact_matrix)
     item_features = dataset.build_item_features(((x['inumber'], tuple([x['tags']]))
                                               for x in allinteractions),normalize=False)
 
     # print(item_features)
-    print(dataset.item_features_shape())
+    # print(dataset.item_features_shape())
 
     # model
     model = LightFM(loss='warp')
@@ -90,7 +90,7 @@ def lightfmReccomend(interact,postdetail):
 
     #predict
     scores = model.predict(user_ids=useridi, item_ids=inumber, item_features=item_features)
-    print(scores)
+    # print(scores)
     top_items = np.array(list(allinteractions))[np.argsort(-scores)]
     
     recommend =[]
