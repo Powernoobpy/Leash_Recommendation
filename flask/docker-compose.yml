@@ -2,6 +2,9 @@ services:
   leash-recommendation:
     ports:
       - 5000:5000
+    volumes:
+    - /app:/usr/src/app/       
+    - /usr/lib/
     build:
      context: .
      dockerfile: Dockerfile
