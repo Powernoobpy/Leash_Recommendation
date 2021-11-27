@@ -6,8 +6,6 @@ from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 from flask.wrappers import Response
 import json
-from bson.objectid import ObjectId
-from bson.json_util import dumps
 from werkzeug.wrappers import response
 app = Flask(__name__)
 import db
