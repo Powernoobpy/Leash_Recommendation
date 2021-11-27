@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_pymongo import pymongo
+from app import app
 
 CONNECTION_STRING = "mongodb+srv://leashposts:leashmasterposts@leash.t5u93.mongodb.net/Leash?retryWrites=true&w=majority"
 
