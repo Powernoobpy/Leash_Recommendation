@@ -2,7 +2,6 @@ from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 from flask.wrappers import Response
 import json
-from bson.json_util import dumps
 from werkzeug.wrappers import response
 import db
 from recommendation import lightfmReccomend
