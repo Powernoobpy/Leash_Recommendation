@@ -1,10 +1,10 @@
 FROM python:3.8.10
 
-WORKDIR /usr/src/app/
+WORKDIR /app
 
-COPY . /usr/src/app/
-
+COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 
-EXPOSE 5000
-CMD python3 app.py
+COPY . .
+
+CMD [ "python3", "app" ]
