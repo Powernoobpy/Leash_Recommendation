@@ -6,8 +6,6 @@ from flask_cors import CORS
 from flask.wrappers import Response
 import json
 from werkzeug.wrappers import response
-from bson.objectid import ObjectId
-from bson.json_util import dumps
 import db
 from recommendation import lightfmReccomend
 
