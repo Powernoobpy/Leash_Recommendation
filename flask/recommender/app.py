@@ -79,7 +79,7 @@ def ping():
     return jsonify({"status":"OK"})
 
 @app.route('/', methods=["GET"])
-def ping():
+def status():
     return Response(
             response=json.dumps({"status":"Recommender is OK"}),
             status=200,
