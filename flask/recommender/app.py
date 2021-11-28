@@ -75,7 +75,7 @@ def recommendation():
         #     mimetype="application/json")
 
 @app.route('/ping', methods=["GET"])
-def recommendation():
+def ping():
     return jsonify({"status":"OK"})
 
 if __name__ == '__main__':
