@@ -1,3 +1,6 @@
+from array import array
+from re import match
+import flask
 from flask import Flask, request, jsonify, Response
 from flask_cors import CORS
 from flask.wrappers import Response
@@ -8,7 +11,7 @@ from recommendation import lightfmReccomend
 
 app = Flask(__name__)
 # cors = CORS(app, resources={r"/api/*": {"origins": "localhost:3000/*"}})
-# cors = CORS(app)
+cors = CORS(app)
 def recommendedPosts(user_id):
     # print(user_id)
     try:
