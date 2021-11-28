@@ -80,7 +80,10 @@ def ping():
 
 @app.route('/', methods=["GET"])
 def ping():
-    return jsonify({"status":"Recommender is OK"})
+    return Response(
+            response=json.dumps({"status":"Recommender is OK"}),
+            status=200,
+            mimetype="application/json")
 
 if __name__ == '__main__':
     app.run(port=5000, debug=False)
