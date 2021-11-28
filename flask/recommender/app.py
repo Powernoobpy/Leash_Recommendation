@@ -78,5 +78,9 @@ def recommendation():
 def ping():
     return jsonify({"status":"OK"})
 
+@app.route('/', methods=["GET"])
+def ping():
+    return jsonify({"status":"Recommender is OK"})
+
 if __name__ == '__main__':
     app.run(port=5000, debug=False)
