@@ -98,16 +98,22 @@ def lightfmReccomend(interact,postdetail):
     #choose post to recommend from top item
     counter = 0
     for x in top_items:
-        for post in postdetail: 
-            if counter <10:
-                if x['_id']== post['_id']:
-                    for r in related:
-                        if r != x['_id']:
-                            recommend.append(post)
-                            counter = counter + 1
-                        break
-            else:
+        notDirty = True
+        for rec in recommend:
+            if x['_id']==rec['_id']:
+                notDirty = False
                 break
+        if(notDirty):
+            for post in postdetail: 
+                if counter <10:
+                    if x['_id']== post['_id']:
+                        for r in related:
+                            if r != x['_id']:
+                                recommend.append(post)
+                                counter = counter + 1
+                            break
+                else:
+                    break
 
     return recommend
     
