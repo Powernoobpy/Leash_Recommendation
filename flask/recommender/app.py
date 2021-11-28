@@ -54,6 +54,13 @@ def seeAllPosts():
         print(ex)
     return "flask mongodb atlas!"
 
+@app.route('/', methods=["GET"])
+def status():
+    return Response(
+            response=json.dumps({"status":"Recommender is OK"}),
+            status=200,
+            mimetype="application/json")
+
 #export
 @app.route('/recommendedPosts', methods=["GET"])
 def recommendation():
@@ -74,9 +81,5 @@ def recommendation():
         #     status=500,
         #     mimetype="application/json")
 
-@app.route('/ping', methods=["GET"])
-def ping():
-    return jsonify({"status":"OK"})
-
 if __name__ == '__main__':
-    app.run(port=5000, debug=False)
+    app.run(host='0.0.0.0', port=5000)
