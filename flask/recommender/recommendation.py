@@ -5,7 +5,7 @@ from lightfm import LightFM
 import scipy.sparse as sp
 
 def lightfmReccomend(interact,postdetail):
-
+    # print(interact)
     useridi = 1
     ppid = [] # all post ids
     iuid = [] # all user ids (same)
@@ -15,30 +15,32 @@ def lightfmReccomend(interact,postdetail):
     allinteractions = [] # all interactions
     nametags = ("Dogs","Cats","Fishes","Mammals","Insects","Reptiles","Birds","Amphibians",)
     etags = [] #all tags multi
-    # print(interact)
+
+
     def convertPost(interact,postdetail):
         
         count = -1
         for post in postdetail:
-            
+            # print(post)
             ppid.append(post['_id'])
             count = count+1 
 
             for tag in post['tags']:
                 etags.append(tag)
-
+                check_inter = {"_id": 0}
                 for inter in interact:
-
+                    # print(inter)
                     if post['_id'] == inter['_id']:
                         inter_f = {"_id": inter['_id'],"interactions" : inter['interactions'],"user_id": 1,"inumber":count,"tags":tag}
                         # print(inter_f)
                         inumber.append(count)
                         iuid.append(1)
                         allinteractions.append(inter_f)
+                        check_inter = inter
                         if inter['interactions'] > 1:
                             related.append(inter['_id'])
                         break
-                if post['_id'] != inter_f['_id']:
+                if post['_id'] != check_inter['_id']:
                         blank = {"_id": post['_id'],"interactions" : 0,"user_id": 1,"inumber":count,"tags":tag}
                         # print(blank)
                         inumber.append(count)
@@ -47,7 +49,7 @@ def lightfmReccomend(interact,postdetail):
     
     #create interaction all
     convertPost(interact,postdetail)
-
+    # print("x")
     #build dataset
     dataset = Dataset(item_identity_features=False)
     dataset.fit(iuid,inumber)
@@ -94,27 +96,34 @@ def lightfmReccomend(interact,postdetail):
     top_items = np.array(list(allinteractions))[np.argsort(-scores)]
     
     recommend =[]
-
+    # print(top_items)
     #choose post to recommend from top item
     counter = 0
     for x in top_items:
         notDirty = True
+        # print(x)
         for rec in recommend:
+            # print(rec)
             if x['_id']==rec['_id']:
                 notDirty = False
                 break
         if(notDirty):
             for post in postdetail: 
+                # print(post['_id'])
+                # print(x['_id'])
+                # print("x")
                 if counter <10:
                     if x['_id']== post['_id']:
-                        for r in related:
-                            if r != x['_id']:
-                                recommend.append(post)
-                                counter = counter + 1
-                            break
+                        print("x")
+                        # for r in related:
+                        #     print(r)
+                            # if r != x['_id']:
+                        recommend.append(post)
+                        counter = counter + 1
+                        # break
                 else:
                     break
-
+    print(recommend)
     return recommend
     
 
