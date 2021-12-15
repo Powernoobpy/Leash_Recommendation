@@ -94,9 +94,9 @@ def lightfmReccomend(interact,postdetail):
     scores = model.predict(user_ids=useridi, item_ids=inumber, item_features=item_features)
     # print(scores)
     top_items = np.array(list(allinteractions))[np.argsort(-scores)]
-    
-    recommend =[]
     # print(top_items)
+
+    recommend =[]
     #choose post to recommend from top item
     counter = 0
     for x in top_items:
@@ -109,18 +109,16 @@ def lightfmReccomend(interact,postdetail):
                 break
         if(notDirty):
             for post in postdetail: 
-                # print(post['_id'])
-                # print(x['_id'])
-                # print("x")
                 if counter <10:
                     if x['_id']== post['_id']:
-                        print("x")
-                        # for r in related:
-                        #     print(r)
-                            # if r != x['_id']:
-                        recommend.append(post)
-                        counter = counter + 1
-                        # break
+                        notRelated = True
+                        for r in related:
+                            if r == x['_id']:
+                                notRelated = False
+                                break
+                        if notRelated:
+                            recommend.append(post)
+                            counter = counter + 1
                 else:
                     break
     print(recommend)
